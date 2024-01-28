@@ -4,8 +4,6 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
 
-        UserInterface UI = new UserInterface();
-
         ArrayList<CardValue> allCards = new ArrayList<>(Arrays.asList(CardValue.values()));
 
         Card card = new Card(CardValue.REVOLVER);

@@ -6,6 +6,8 @@ public class Game {
     public Player[] players;
     private int turnIndex;
 
+    private UserInterface gameUI;
+
     public Game(){
         Scanner myObj = new Scanner(System.in);
         System.out.print("Unique Player Names Separated by commas with no spaces \n >>>");
@@ -20,6 +22,8 @@ public class Game {
 
         // set turn index
         turnIndex = 0;
+
+        this.gameUI = new UserInterface(players);
     }
 
     public int getNextTurn(){
