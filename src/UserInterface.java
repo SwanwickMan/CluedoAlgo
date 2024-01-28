@@ -1,9 +1,12 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.Set;
 
 public class UserInterface {
     public JFrame f = new JFrame();
-    public UserInterface(Player[] players) {
+    public UserInterface(Game game, Player[] players) {
 //        JButton b = new JButton("click");//creating instance of JButton
 //        b.setBounds(130, 100, 100, 40);//x axis, y axis, width, height
 //
@@ -14,12 +17,13 @@ public class UserInterface {
 //        f.setVisible(true);//making the frame visible
 
         // initialise table
-        Player[] columnNames = generateColumns(players);
-        String[][] data = {};
-
         DefaultTableModel model = new DefaultTableModel();
         JTable t = new JTable(model);
-        model.addColumn(columnNames);
+        createColumns(model,players);
+        addCardData(model,"who?",Card.suspects);
+        addCardData(model,"what?",Card.weapons);
+        addCardData(model,"where?",Card.rooms);
+
 
         JScrollPane sp = new JScrollPane(t);
         f.add(sp);
@@ -27,13 +31,20 @@ public class UserInterface {
         f.setVisible(true);
 
         //add all rows
-    }
 
-    private Player[] generateColumns(Player[] players){
-        Player[] columns = new Player[players.length+1];
-        columns[0] = new Player("Mansion");
-        System.arraycopy(players, 0, columns, 1, players.length);
-        return columns;
 
     }
+
+    private void createColumns(DefaultTableModel model,Player[] players){
+        model.addColumn(new Player("Mansion"));
+        for (Player p : players) {model.addColumn(p);}
+    }
+    private void addCardData(DefaultTableModel model,String title, Set<CardValue> cardSet){
+        model.addRow(new String[] {title});
+        for (CardValue c : cardSet){
+            model.addRow(new CardValue[] {c});
+        }
+    }
+
+
 }

@@ -23,7 +23,7 @@ public class Game {
         // set turn index
         turnIndex = 0;
 
-        this.gameUI = new UserInterface(players);
+        this.gameUI = new UserInterface(this, players);
     }
 
     public int getNextTurn(){
