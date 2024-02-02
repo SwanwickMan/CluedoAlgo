@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Player {
@@ -40,5 +41,21 @@ public class Player {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Player)) {
+            return false;
+        }
+        return this.name == ((Player)o).name;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.name);
     }
 }

@@ -1,49 +1,70 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.util.HashMap;
 import java.util.Set;
 
 public class UserInterface {
     public JFrame f = new JFrame();
+    private DefaultTableModel model;
+    private HashMap<Player,Integer> playerToColumn;
+    private HashMap<Card,Integer> cardToRow;
+
     public UserInterface(Game game, Player[] players) {
-//        JButton b = new JButton("click");//creating instance of JButton
-//        b.setBounds(130, 100, 100, 40);//x axis, y axis, width, height
-//
-//        f.add(b);//adding button in JFrame
-//
-//        f.setSize(400, 500);//400 width and 500 height
-//        f.setLayout(null);//using no layout managers
-//        f.setVisible(true);//making the frame visible
+        //initialise Hashmaps
+        playerToColumn = new HashMap<Player,Integer>();
+        cardToRow = new HashMap<Card,Integer>();
 
         // initialise table
         DefaultTableModel model = new DefaultTableModel();
+        this.model = model;
         JTable t = new JTable(model);
         createColumns(model,players);
         addCardData(model,"who?",Card.suspects);
         addCardData(model,"what?",Card.weapons);
         addCardData(model,"where?",Card.rooms);
 
-
         JScrollPane sp = new JScrollPane(t);
-        f.add(sp);
-        f.setSize(500, 200);
+        f.add(sp,BorderLayout.PAGE_START);
+        f.setSize(500, 500);
+        f.pack();
         f.setVisible(true);
-
-        //add all rows
-
 
     }
 
     private void createColumns(DefaultTableModel model,Player[] players){
         model.addColumn(new Player("Mansion"));
-        for (Player p : players) {model.addColumn(p);}
+        int i = 1;
+        for (Player p : players) {
+            model.addColumn(p);
+            playerToColumn.put(p,i);
+            System.out.println(playerToColumn.toString());
+            i++;
+        }
     }
+
     private void addCardData(DefaultTableModel model,String title, Set<CardValue> cardSet){
         model.addRow(new String[] {title});
+        int i = model.getRowCount();
+        System.out.println(i);
         for (CardValue c : cardSet){
-            model.addRow(new CardValue[] {c});
+            Card card = new Card(c);
+            model.addRow(new Card[] {card});
+            cardToRow.put(card, i);
+            i++;
         }
+    }
+
+    public void testSet(Object value, Player x, Card y){
+        int column = playerToColumn.get(x);
+        int row = cardToRow.get(y);
+        model.setValueAt(value, row, column);
+    }
+
+    public void refresh(){
+        f.repaint();
     }
 
 

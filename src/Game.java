@@ -6,7 +6,7 @@ public class Game {
     public Player[] players;
     private int turnIndex;
 
-    private UserInterface gameUI;
+    public UserInterface gameUI;
 
     public Game(){
         Scanner myObj = new Scanner(System.in);
@@ -27,7 +27,10 @@ public class Game {
     }
 
     public int getNextTurn(){
-        while (true){
+        boolean activePlayerExists = false;
+        for(Player p : players){if(p.active){activePlayerExists = true;}}
+
+        while (activePlayerExists){
             turnIndex ++;
             if (turnIndex >= players.length){
                 turnIndex = 0;
@@ -36,6 +39,8 @@ public class Game {
                 return turnIndex;
             }
         }
+
+        return -1;
 
     }
 }
