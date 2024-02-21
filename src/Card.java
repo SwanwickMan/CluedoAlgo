@@ -10,6 +10,7 @@ public class Card {
     public static final Set<CardValue> weapons = Set.of(CardValue.CANDLESTICK, CardValue.REVOLVER, CardValue.DAGGER, CardValue.WRENCH, CardValue.LEADPIPE, CardValue.ROPE);
     public static final Set<CardValue> rooms = Set.of(CardValue.HALL, CardValue.KITCHEN, CardValue.BALLROOM, CardValue.DININGROOM, CardValue.STUDY, CardValue.CONSERVATORY, CardValue.LIBRARY, CardValue.LOUNGE, CardValue.BILLIARDROOM);
 
+
     public Card(CardValue value){
         this.value = value;
         if (suspects.contains(value)){this.type = CardType.SUSPECT;}

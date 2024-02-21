@@ -28,7 +28,6 @@ public class UserInterface {
 
         JScrollPane sp = new JScrollPane(t);
         f.add(sp,BorderLayout.PAGE_START);
-        f.setSize(500, 500);
         f.pack();
         f.setVisible(true);
 
@@ -40,7 +39,6 @@ public class UserInterface {
         for (Player p : players) {
             model.addColumn(p);
             playerToColumn.put(p,i);
-            System.out.println(playerToColumn.toString());
             i++;
         }
     }
@@ -48,7 +46,6 @@ public class UserInterface {
     private void addCardData(DefaultTableModel model,String title, Set<CardValue> cardSet){
         model.addRow(new String[] {title});
         int i = model.getRowCount();
-        System.out.println(i);
         for (CardValue c : cardSet){
             Card card = new Card(c);
             model.addRow(new Card[] {card});

@@ -25,6 +25,12 @@ public class Game {
 
         this.gameUI = new UserInterface(this, players);
     }
+    public Game(boolean vaccuous){
+        this.players = new GameSetup().collectData();
+        turnIndex = 0;
+        this.gameUI = new UserInterface(this, players);
+    }
+
 
     public int getNextTurn(){
         boolean activePlayerExists = false;
