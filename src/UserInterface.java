@@ -54,6 +54,10 @@ public class UserInterface {
         }
     }
 
+    public void updatePlayerColumn(Player player){
+        // implement later
+    }
+
     public void testSet(Object value, Player x, Card y){
         int column = playerToColumn.get(x);
         int row = cardToRow.get(y);

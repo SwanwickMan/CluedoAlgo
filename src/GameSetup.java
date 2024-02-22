@@ -6,10 +6,14 @@ import java.util.Arrays;
 public class GameSetup {
     public JFrame f;
     public JTextField inputPlayers;
-    public JComboBox inputCards;
+    public ArrayList<JComboBox<Card>> inputCardsList;
+    private int noOfPlayers;
     public boolean collect = false;
 
-    public GameSetup() {
+    public GameSetup(int noOfPlayers) {
+        this.noOfPlayers = noOfPlayers;
+        inputCardsList = new ArrayList<>();
+
         f = new JFrame();
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -24,15 +28,18 @@ public class GameSetup {
 
     public PackagedSetupInfo collectData(){
         while (true) {
-            Player[] players = stringToPlayers(inputPlayers.getText());
-            Card[] startingCards = getCards();
-            PackagedSetupInfo gameInfo = new PackagedSetupInfo(players, startingCards);
-            if (players.length >= 3 && collect) {
-                System.out.println("something");
-                f.dispose();
-                return gameInfo;
+            System.out.print("");
+            if (collect){
+                System.out.println("attempting collect");
+                Player[] players = stringToPlayers(inputPlayers.getText());
+                Card[] startingCards = getCards();
+                PackagedSetupInfo gameInfo = new PackagedSetupInfo(players, startingCards, noOfPlayers);
+                if (gameInfo.validate()) {
+                    f.dispose();
+                    return gameInfo;
+                }
+                else {collect = false;}
             }
-            else {collect = false;}
         }
     }
 
@@ -47,7 +54,37 @@ public class GameSetup {
     }
 
     private Card[] getCards(){
-        return new Card[] {(Card) inputCards.getSelectedItem()};
+        Card[] cards = new Card[inputCardsList.size()];
+        for (int i = 0; i < cards.length; i++){
+            cards[i] = (Card) inputCardsList.get(i).getSelectedItem();
+        }
+        return cards;
+    }
+
+    private void addNewCardSelection(JPanel panel, int y){
+        JComboBox<Card> newDropDown= new JComboBox<Card>(getArrayOfAllCards());
+        inputCardsList.add(newDropDown);
+        newDropDown.setBounds(80,y,165,25);
+        newDropDown.setSelectedIndex(0);
+        panel.add(newDropDown);
+
+    }
+
+    private void addAllCardSelections(JPanel panel, int baseY){
+        int yModifier = 30;
+
+        JLabel cardInputHint = new JLabel("Cards: ");
+        cardInputHint.setBounds(10,baseY,80,25);
+        panel.add(cardInputHint);
+
+        for (int i=0; i < noOfPlayers; i++){
+            addNewCardSelection(panel,baseY+yModifier*i);
+        }
+
+        JButton startButton = new JButton("Start Game");
+        startButton.addActionListener(e-> collect = true);
+        startButton.setBounds(10, baseY+yModifier*(noOfPlayers), 80, 25);
+        panel.add(startButton);
     }
 
     private void placeComponents(JPanel panel){
@@ -58,18 +95,8 @@ public class GameSetup {
         this.inputPlayers = new JTextField();
         inputPlayers.setBounds(80,20,165,25);
         panel.add(inputPlayers);
-        // add starting cards will need loop fix later
-        JLabel cardInputHint = new JLabel("Cards: ");
-        cardInputHint.setBounds(10,50,80,25);
-        panel.add(cardInputHint);
-        this.inputCards = new JComboBox(getArrayOfAllCards());
-        inputCards.setBounds(80,50,165,25);
-        panel.add(inputCards);
-        // add start button
-        JButton startButton = new JButton("Start Game");
-        startButton.addActionListener(e->collect = true);
-        startButton.setBounds(10, 80, 80, 25);
-        panel.add(startButton);
+        // add starting card selections and finish button
+        addAllCardSelections(panel, 50);
 
     }
 
