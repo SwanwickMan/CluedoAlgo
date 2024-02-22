@@ -9,13 +9,19 @@ public class PackagedSetupInfo {
     }
 
     public boolean validate(){
-        if (players.length >= 3 &&)
-        return true;
+        if (players.length >= 3 && !containsDuplicates(startingCards)) {
+            return true;
+        }
+        else { return false; }
     }
 
     private boolean containsDuplicates(Card[] arr){
-        boolean duplicate = false;
-        for (Card c: arr){} // fix later
+        for (Card c1: arr){
+            for (Card c2: arr){
+                if (c1.equals(c2)){ return true; }
+            }
+        }
+        return false;
     }
 
     public Player[] getPlayers() {

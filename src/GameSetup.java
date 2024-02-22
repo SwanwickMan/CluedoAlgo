@@ -26,7 +26,7 @@ public class GameSetup {
         while (true) {
             Player[] players = stringToPlayers(inputPlayers.getText());
             Card[] startingCards = getCards();
-            PackagedSetupInfo gameInfo = new PackagedSetupInfo(players, startingCards)
+            PackagedSetupInfo gameInfo = new PackagedSetupInfo(players, startingCards);
             if (players.length >= 3 && collect) {
                 System.out.println("something");
                 f.dispose();
