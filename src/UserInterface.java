@@ -1,7 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -17,19 +17,42 @@ public class UserInterface {
         cardToRow = new HashMap<>();
 
         // initialise table
-        DefaultTableModel model = new DefaultTableModel();
-        this.model = model;
-        JTable t = new JTable(model);
-        createColumns(model,players);
-        addCardData(model,"who?",Card.suspects);
-        addCardData(model,"what?",Card.weapons);
-        addCardData(model,"where?",Card.rooms);
-
-        JScrollPane sp = new JScrollPane(t);
-        f.add(sp,BorderLayout.PAGE_START);
+        JPanel tablePanel = createTablePanel(players);
+        f.add(tablePanel);
         f.pack();
         f.setVisible(true);
 
+    }
+
+    private JPanel createTablePanel(Player[] players) {
+        JPanel tablePanel = new JPanel();
+
+        // initialise table
+        DefaultTableModel model = new DefaultTableModel();
+        this.model = model;
+        JTable t = new JTable(model);
+        createColumns(model, players);
+        addCardData(model, "who?", Card.suspects);
+        addCardData(model, "what?", Card.weapons);
+        addCardData(model, "where?", Card.rooms);
+        JScrollPane sp = new JScrollPane(t);
+
+        // set style
+        tablePanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTH;
+
+        // set and return table
+        tablePanel.add(sp,gbc);
+        return tablePanel;
+    }
+
+    private JPanel createInputPanel(){ // implement rest later
+        JPanel inputPanel = new JPanel();
+
+        return inputPanel;
     }
 
     private void createColumns(DefaultTableModel model,Player[] players){
