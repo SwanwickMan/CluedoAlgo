@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -14,8 +13,8 @@ public class UserInterface {
 
     public UserInterface(Game game, Player[] players) {
         //initialise Hashmaps
-        playerToColumn = new HashMap<Player,Integer>();
-        cardToRow = new HashMap<Card,Integer>();
+        playerToColumn = new HashMap<>();
+        cardToRow = new HashMap<>();
 
         // initialise table
         DefaultTableModel model = new DefaultTableModel();
@@ -55,10 +54,15 @@ public class UserInterface {
     }
 
     public void updatePlayerColumn(Player player){
-        // implement later
+        for (Card card: player.doesHave){
+            setTableValue("✅", player, card);
+        }
+        for (Card card: player.notHave){
+            setTableValue("❌", player, card);
+        }
     }
 
-    public void testSet(Object value, Player x, Card y){
+    public void setTableValue(Object value, Player x, Card y){
         int column = playerToColumn.get(x);
         int row = cardToRow.get(y);
         model.setValueAt(value, row, column);

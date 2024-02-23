@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class PackagedSetupInfo {
     private final Player[] players;
     private final Card[] startingCards;
@@ -7,28 +9,49 @@ public class PackagedSetupInfo {
         this.players = players;
         this.startingCards = startingCards;
         this.noOfPlayers = noOfPlayers;
+        updateUserCards();
 
     }
 
     public boolean validate(){
-        System.out.println(noOfPlayers);System.out.println(!containsDuplicates());System.out.println(singleUserExists());
-        return players.length == noOfPlayers && !containsDuplicates() && singleUserExists();
+        return validateNoOfPlayers() && containsNoDuplicates(startingCards)
+                && containsNoDuplicates(players) && singleUserExists();
     }
 
-    private boolean containsDuplicates(){
-        for (Card c1: startingCards){
-            for (Card c2: startingCards){
-                if (c1.equals(c2) && !(c1==c2)){ return true; }
+    private boolean validateNoOfPlayers(){
+        if (players.length == noOfPlayers){return true;}
+        System.out.println("wrong number of players defined");
+        return false;
+    }
+
+    private boolean containsNoDuplicates(Object[] arr){
+        for (Object c1: arr){
+            for (Object c2: arr){
+                if (c1.equals(c2) && !(c1==c2)){
+                    System.out.println("Error: duplicates: " + c1.toString() + " " + c2.toString());
+                    return false; }
             }
         }
-        return false;
+        return true;
     }
     private boolean singleUserExists(){
         int noOfUsers = 0;
         for (Player p: players){
             if (p.IsUser()){noOfUsers++;}
         }
-        return noOfUsers == 1;
+        if (noOfUsers == 1){
+            return true;
+        }
+        System.out.println("Error: program must have exactly one user defined with *Username");
+        return false;
+    }
+
+    private void updateUserCards(){
+        for (Player p: players){
+            if(p.IsUser()){
+                p.doesHave.addAll(Arrays.asList(startingCards));
+            }
+        }
     }
 
     public Player[] getPlayers() {

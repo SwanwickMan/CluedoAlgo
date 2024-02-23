@@ -7,7 +7,7 @@ public class GameSetup {
     public JFrame f;
     public JTextField inputPlayers;
     public ArrayList<JComboBox<Card>> inputCardsList;
-    private int noOfPlayers;
+    private final int noOfPlayers;
     public boolean collect = false;
 
     public GameSetup(int noOfPlayers) {
@@ -62,7 +62,7 @@ public class GameSetup {
     }
 
     private void addNewCardSelection(JPanel panel, int y){
-        JComboBox<Card> newDropDown= new JComboBox<Card>(getArrayOfAllCards());
+        JComboBox<Card> newDropDown= new JComboBox<>(getArrayOfAllCards());
         inputCardsList.add(newDropDown);
         newDropDown.setBounds(80,y,165,25);
         newDropDown.setSelectedIndex(0);
@@ -101,7 +101,7 @@ public class GameSetup {
     }
 
     private Card[] getArrayOfAllCards(){
-        ArrayList<Card> cards = new ArrayList<Card>();
+        ArrayList<Card> cards = new ArrayList<>();
         for (CardValue c : Card.suspects){
             cards.add(new Card(c));
         }

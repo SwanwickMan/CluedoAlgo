@@ -3,13 +3,20 @@ import java.util.Scanner;
 public class Game {
     public Player[] players;
     private int turnIndex;
+    private int noOfPlayers;
 
     public UserInterface gameUI;
 
 
     public Game(){
-        int noOfPlayers = getNumberOfPlayer();
+        this.noOfPlayers = getNumberOfPlayer();
         PackagedSetupInfo setupInfo = new GameSetup(noOfPlayers).collectData();
+        this.players = setupInfo.getPlayers();
+        this.turnIndex = 0;
+        this.gameUI = new UserInterface(this, players);
+    }
+
+    public Game(PackagedSetupInfo setupInfo){
         this.players = setupInfo.getPlayers();
         this.turnIndex = 0;
         this.gameUI = new UserInterface(this, players);

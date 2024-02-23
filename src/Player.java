@@ -15,9 +15,9 @@ public class Player {
     public Player(String name){
         this.name = setName(name);
         this.active = true;
-        this.notHave = new HashSet<Card>();
-        this.doesHave = new HashSet<Card>();
-        this.guessList = new ArrayList<HashSet<Card>>();
+        this.notHave = new HashSet<>();
+        this.doesHave = new HashSet<>();
+        this.guessList = new ArrayList<>();
     }
 
     // checks if players is marked as user
@@ -38,7 +38,7 @@ public class Player {
 
     public void showOther(Card suspect, Card weapon, Card room){
         // add guess to list
-        guessList.add(new HashSet<Card>(Arrays.asList(suspect,weapon,room)));
+        guessList.add(new HashSet<>(Arrays.asList(suspect, weapon, room)));
     }
 
     public void showMe(Card cardShown){
@@ -47,6 +47,15 @@ public class Player {
 
     public void EvaluateSelf(){
 
+    }
+
+    public void addHasCard(Card card){
+        if (notHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in notHave Set");}
+        this.doesHave.add(card);
+    }
+    public void addNotHasCard(Card card){
+        if (doesHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in doesHave Set");}
+        this.notHave.add(card);
     }
 
     @Override
@@ -62,7 +71,7 @@ public class Player {
         if (!(o instanceof Player)) {
             return false;
         }
-        return this.name == ((Player)o).name;
+        return Objects.equals(this.name, ((Player) o).name);
     }
 
     @Override
