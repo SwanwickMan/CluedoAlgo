@@ -18,7 +18,25 @@ public class UserInterface {
 
         // initialise table
         JPanel tablePanel = createTablePanel(players);
-        f.add(tablePanel);
+        JPanel inputPanel = createInputPanel();
+
+        f.setLayout(new GridBagLayout());
+        GridBagConstraints cst = new GridBagConstraints();
+        cst.fill = GridBagConstraints.WEST;
+        cst.gridx = 0;
+        cst.gridy = 0;
+        cst.weightx = 1.0; // --> You miss this for the top panel
+        cst.weighty = 1.0;
+        f.add(tablePanel, cst);
+
+        cst = new GridBagConstraints();
+        cst.fill = GridBagConstraints.EAST;
+        cst.gridx = 1;
+        cst.gridy = 0;
+        cst.weightx = 1.0; // You miss this for the bottom panel
+        cst.weighty = 0.0;
+        f.add(inputPanel, cst);
+
         f.pack();
         f.setVisible(true);
 
@@ -51,6 +69,20 @@ public class UserInterface {
 
     private JPanel createInputPanel(){ // implement rest later
         JPanel inputPanel = new JPanel();
+
+        JLabel inputHint = new JLabel("Input something: ");
+        inputHint.setBounds(10,20,80,25);
+        inputPanel.add(inputHint);
+        JTextField inputPlayers = new JTextField();
+        inputPlayers.setBounds(80,20,165,25);
+        inputPanel.add(inputPlayers);
+
+        // set style
+        inputPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.SOUTH;
 
         return inputPanel;
     }
