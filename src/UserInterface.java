@@ -2,14 +2,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 public class UserInterface {
     public JFrame f = new JFrame();
     private DefaultTableModel model;
-    private HashMap<Player,Integer> playerToColumn;
-    private HashMap<Card,Integer> cardToRow;
+    public ArrayList<JComboBox<Card>> inputCardsList;
+    private final HashMap<Player,Integer> playerToColumn;
+    private final HashMap<Card,Integer> cardToRow;
 
     public UserInterface(Game game, Player[] players) {
         //initialise Hashmaps
@@ -23,18 +25,14 @@ public class UserInterface {
         f.setLayout(new GridBagLayout());
         GridBagConstraints cst = new GridBagConstraints();
         cst.fill = GridBagConstraints.WEST;
-        cst.gridx = 0;
-        cst.gridy = 0;
-        cst.weightx = 1.0; // --> You miss this for the top panel
-        cst.weighty = 1.0;
+        cst.gridx = 0; cst.gridy = 0;
+        cst.weightx = 1.0; cst.weighty = 1.0;
         f.add(tablePanel, cst);
 
         cst = new GridBagConstraints();
         cst.fill = GridBagConstraints.EAST;
-        cst.gridx = 1;
-        cst.gridy = 0;
-        cst.weightx = 1.0; // You miss this for the bottom panel
-        cst.weighty = 0.0;
+        cst.gridx = 1; cst.gridy = 0;
+        cst.weightx = 1.0; cst.weighty = 0.0;
         f.add(inputPanel, cst);
 
         f.pack();
@@ -69,27 +67,40 @@ public class UserInterface {
 
     private JPanel createInputPanel(){ // implement rest later
         JPanel inputPanel = new JPanel();
+        inputCardsList = new ArrayList<>();
 
-        JLabel inputHint = new JLabel("Input something: ");
-        inputHint.setBounds(10,20,80,25);
-        inputPanel.add(inputHint);
-        JTextField inputPlayers = new JTextField();
-        inputPlayers.setBounds(80,20,165,25);
-        inputPanel.add(inputPlayers);
+        JLabel cardInputHint = new JLabel("Cards: ");
+        cardInputHint.setBounds(10,10,80,25);
+        inputPanel.add(cardInputHint);
 
-        // set style
-        inputPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.SOUTH;
+        addNewCardSelection(inputPanel,"suspects", Card.suspects, 30);
+        addNewCardSelection(inputPanel,"weapons", Card.weapons, 60);
+        addNewCardSelection(inputPanel, "weapons", Card.rooms, 90);
+
+        JButton startButton = new JButton("Start Game");
+        startButton.addActionListener(e-> System.out.println("Button was clicked"));
+        startButton.setBounds(10, 120, 80, 25);
+        inputPanel.add(startButton);
 
         return inputPanel;
+    }
+    private void addNewCardSelection(JPanel panel, String text, Set<Card> cardSet, int y){
+        JLabel cardInputHint = new JLabel(text);
+        cardInputHint.setBounds(10,y,80,25);
+        panel.add(cardInputHint);
+
+        JComboBox<Card> newDropDown= new JComboBox<>(Card.cardSetToArray(cardSet));
+        inputCardsList.add(newDropDown);
+        newDropDown.setBounds(80,y,165,25);
+        newDropDown.setSelectedIndex(0);
+        panel.add(newDropDown);
+
     }
 
     private void createColumns(DefaultTableModel model,Player[] players){
         model.addColumn(new Player("Mansion"));
-        int i = 1;
+        model.addColumn(new Player("|???|"));
+        int i = 2;
         for (Player p : players) {
             model.addColumn(p);
             playerToColumn.put(p,i);
@@ -97,13 +108,12 @@ public class UserInterface {
         }
     }
 
-    private void addCardData(DefaultTableModel model,String title, Set<CardValue> cardSet){
+    private void addCardData(DefaultTableModel model,String title, Set<Card> cardSet){
         model.addRow(new String[] {title});
         int i = model.getRowCount();
-        for (CardValue c : cardSet){
-            Card card = new Card(c);
-            model.addRow(new Card[] {card});
-            cardToRow.put(card, i);
+        for (Card c : cardSet){
+            model.addRow(new Card[] {c});
+            cardToRow.put(c, i);
             i++;
         }
     }
@@ -119,6 +129,13 @@ public class UserInterface {
 
     public void setTableValue(Object value, Player x, Card y){
         int column = playerToColumn.get(x);
+        int row = cardToRow.get(y);
+        model.setValueAt(value, row, column);
+    }
+
+    // This Column indicates whether a card is definitely Guilty or not
+    public void setBigCardColumn(Object value, Card y) {
+        int column = 1; // value of Big Card column
         int row = cardToRow.get(y);
         model.setValueAt(value, row, column);
     }

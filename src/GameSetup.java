@@ -62,7 +62,7 @@ public class GameSetup {
     }
 
     private void addNewCardSelection(JPanel panel, int y){
-        JComboBox<Card> newDropDown= new JComboBox<>(getArrayOfAllCards());
+        JComboBox<Card> newDropDown= new JComboBox<>(Card.getArrayOfAllCards());
         inputCardsList.add(newDropDown);
         newDropDown.setBounds(80,y,165,25);
         newDropDown.setSelectedIndex(0);
@@ -100,24 +100,4 @@ public class GameSetup {
 
     }
 
-    private Card[] getArrayOfAllCards(){
-        ArrayList<Card> cards = new ArrayList<>();
-        for (CardValue c : Card.suspects){
-            cards.add(new Card(c));
-        }
-        for (CardValue c : Card.rooms){
-            cards.add(new Card(c));
-        }
-        for (CardValue c : Card.weapons){
-            cards.add(new Card(c));
-        }
-
-        // manual copy cause problems
-        Card[] cardsArray = new Card[cards.size()];
-        for (int i = 0; i < cards.size(); i++){
-            cardsArray[i] = cards.get(i);
-        }
-        return cardsArray;
     }
-
-}

@@ -1,9 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
-        ArrayList<CardValue> allCards = new ArrayList<>(Arrays.asList(CardValue.values()));
         Card card = new Card(CardValue.REVOLVER);
 
         // test setup of game
@@ -23,6 +19,9 @@ public class Main {
 
         players[2].addNotHasCard(new Card(CardValue.GREEN));
         players[1].addHasCard(new Card(CardValue.GREEN));
+
+        game.gameUI.setBigCardColumn("WARIO", new Card(CardValue.CANDLESTICK));
+        game.gameUI.updatePlayerColumn(players[1]);
         game.gameUI.updatePlayerColumn(players[2]);
         game.gameUI.refresh();
     }
