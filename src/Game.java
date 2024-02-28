@@ -31,7 +31,7 @@ public class Game {
     }
 
 
-    public int getNextTurn(){
+    public Player getNextPlayer(){
         boolean activePlayerExists = false;
         for(Player p : players){if(p.active){activePlayerExists = true;}}
 
@@ -41,11 +41,11 @@ public class Game {
                 turnIndex = 0;
             }
             if (players[turnIndex].active){
-                return turnIndex;
+                return players[turnIndex];
             }
         }
 
-        return -1;
+        throw new RuntimeException("No players Left");
 
     }
 }
