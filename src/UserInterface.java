@@ -22,18 +22,9 @@ public class UserInterface {
         JPanel tablePanel = createTablePanel(players);
         JPanel inputPanel = createInputPanel();
 
-        f.setLayout(new GridBagLayout());
-        GridBagConstraints cst = new GridBagConstraints();
-        cst.fill = GridBagConstraints.WEST;
-        cst.gridx = 0; cst.gridy = 0;
-        cst.weightx = 1.0; cst.weighty = 1.0;
-        f.add(tablePanel, cst);
-
-        cst = new GridBagConstraints();
-        cst.fill = GridBagConstraints.EAST;
-        cst.gridx = 1; cst.gridy = 0;
-        cst.weightx = 1.0; cst.weighty = 0.0;
-        f.add(inputPanel, cst);
+        f.setLayout(new BorderLayout());
+        f.add(tablePanel, BorderLayout.WEST);
+        f.add(inputPanel, BorderLayout.EAST);
 
         f.pack();
         f.setVisible(true);
@@ -53,34 +44,34 @@ public class UserInterface {
         addCardData(model, "where?", Card.rooms);
         JScrollPane sp = new JScrollPane(t);
 
-        // set style
-        tablePanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTH;
-
         // set and return table
-        tablePanel.add(sp,gbc);
+        tablePanel.add(sp);
         return tablePanel;
     }
 
     private JPanel createInputPanel(){ // implement rest later
         JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(null);
+        inputPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inputCardsList = new ArrayList<>();
 
-        JLabel cardInputHint = new JLabel("Cards: ");
-        cardInputHint.setBounds(10,10,80,25);
+        JLabel cardInputHint = new JLabel("Input Panel ");
+        cardInputHint.setBounds(100,0,80,25);
         inputPanel.add(cardInputHint);
 
-        addNewCardSelection(inputPanel,"suspects", Card.suspects, 30);
-        addNewCardSelection(inputPanel,"weapons", Card.weapons, 60);
-        addNewCardSelection(inputPanel, "weapons", Card.rooms, 90);
+        addNewCardSelection(inputPanel,"Suspects:", Card.suspects, 30);
+        addNewCardSelection(inputPanel,"Weapons:", Card.weapons, 60);
+        addNewCardSelection(inputPanel, "Rooms:", Card.rooms, 90);
 
         JButton startButton = new JButton("Start Game");
         startButton.addActionListener(e-> System.out.println("Button was clicked"));
-        startButton.setBounds(10, 120, 80, 25);
+        startButton.setBounds(40, 120, 80, 25);
         inputPanel.add(startButton);
+        JButton altButton = new JButton("Alt Button");
+        altButton.addActionListener(e-> System.out.println("Alt Button was clicked"));
+        altButton.setBounds(130, 120, 80, 25);
+        inputPanel.add(altButton);
+        inputPanel.setPreferredSize(new Dimension(250,150));
 
         return inputPanel;
     }
