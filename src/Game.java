@@ -4,6 +4,7 @@ public class Game {
     public Player[] players;
     public Player user;
     public Player currentPlayer;
+    public Player currentPlayerAsked;
     private int noOfPlayers;
     public GameState gameState;
     public UserInterface gameUI;
@@ -35,7 +36,7 @@ public class Game {
     }
 
 
-    public Player getNextPlayer(){
+    public Player getNextPlayerTurn(){
         boolean activePlayers = false;
         for(Player p : players){if (p.active) { activePlayers = true; break; }}
         if (!activePlayers) { throw new RuntimeException("No active players left"); }
@@ -50,9 +51,18 @@ public class Game {
             if (p.active) {return p;}
             if (p.equals(currentPlayer)){break;}
         }
-
         throw new RuntimeException("Single player Left");
-
+    }
+    public Player getNextPlayer(Player player){
+        boolean afterCurrentPlayer = false;
+        for (Player p: players){
+            if (afterCurrentPlayer) {return p;}
+            if (p.equals(currentPlayer)){afterCurrentPlayer = true;}
+        }
+        for (Player p: players){
+            if (!p.equals(currentPlayer)){return p;}
+        }
+        throw new RuntimeException("player not found");
     }
 
     public void takeTurn(Player player){

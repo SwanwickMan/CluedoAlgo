@@ -159,28 +159,37 @@ public class UserInterface {
     private void updateButtonsToPlayerGuesses(){
         updateButtonNames("HasCards", "NotHasCards");
     }
+    private void setLockComboBox(Boolean isLocked){
+        for (JComboBox<Card> cb: inputCardsList){
+            cb.setEnabled(isLocked);
+        }
+    }
 
+    // this is a whole mess and should be fractured into about 6 different functions -fix later
     private void handleFirstButton(){
-        // update
+        setLockComboBox(true);
+        // update gameState to player taking a guess
         if (game.gameState == GameState.doesPlayerGuess) {
             game.gameState = GameState.playerGuesses;
+            game.currentPlayerAsked = game.getNextPlayer(game.currentPlayer);
             updateButtonsToPlayerGuesses();
-            System.out.println("asad");
         }
-        else {
+        // event player shows other player cards
+        else if (game.gameState == GameState.playerGuesses) {
             System.out.println("else asad");
         }
         refresh();
     }
     private void handleSecondButton(){
-        // skip over if player selects no
+        setLockComboBox(false);
+        // skip over player if no selected
         if (game.gameState == GameState.doesPlayerGuess) {
-            game.currentPlayer = game.getNextPlayer();
+            game.currentPlayer = game.getNextPlayerTurn();
             updateButtonsToDoesPlayerGuess();
-            System.out.println("fhdgh");
         }
-        else{
-            System.out.println("else fhdgh");
+        // event player doesn't show other player cards
+        else if (game.gameState == GameState.playerGuesses) {
+            game.currentPlayerAsked = game.getNextPlayer(game.currentPlayer);
         }
 
         refresh();
