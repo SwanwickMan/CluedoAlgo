@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Game {
@@ -68,6 +70,27 @@ public class Game {
     public void takeTurn(Player player){
         if (player.isUser()) { userTakeTurn(); }
         else { nonUserTakeTurn(); }
+    }
+
+    public void playerTakesGuess(){
+        gameState = GameState.playerGuesses;
+        currentPlayerAsked = getNextPlayer(currentPlayer);
+        gameUI.updateButtonsToPlayerGuesses();
+    }
+
+    public void showOtherPlayerCards(){
+        if (currentPlayerAsked.isUser()){ return; } // do nothing if user is showing their cards
+        else if (currentPlayer.isUser()){
+            // when user is shown card set card to not guilty and add to other player hasList
+            Card shownCard = gameUI.getCardShownToUser();
+            gameUI.setCardColumnNotGuilty(shownCard);
+            currentPlayerAsked.addHasCard(shownCard);
+        }
+        else {
+            // when non-users shows cards add cards to player showings guessList
+            HashSet<Card> shownCards = gameUI.getCards();
+            currentPlayerAsked.guessList.add(shownCards);
+        }
     }
 
     public void userTakeTurn(){

@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserInterface {
@@ -13,6 +14,7 @@ public class UserInterface {
     public ArrayList<JComboBox<Card>> inputCardsList;
     public JButton firstButton;
     public JButton secondButton;
+    public JComboBox<Card> userShownCard;
     private final HashMap<Player,Integer> playerToColumn;
     private final HashMap<Card,Integer> cardToRow;
 
@@ -33,6 +35,8 @@ public class UserInterface {
 
         f.pack();
         f.setVisible(true);
+
+        System.out.println(getCardShownToUser());
 
     }
 
@@ -78,6 +82,9 @@ public class UserInterface {
         inputPanel.add(secondButton);
         inputPanel.setPreferredSize(new Dimension(260,150));
 
+        // add user card shown drop down box
+
+
         return inputPanel;
     }
     private void addNewCardSelection(JPanel panel, String text, Set<Card> cardSet, int y){
@@ -114,6 +121,15 @@ public class UserInterface {
         }
     }
 
+    public Card getCardShownToUser(){
+        Card input = null;
+        Card[] choices = Card.getArrayOfAllCards();
+        while (input == null) {
+            input = (Card) JOptionPane.showInputDialog(null, "Select the shown card", "Get Shown Card", JOptionPane.QUESTION_MESSAGE, null, choices, null);
+        }
+        return input;
+    }
+
     public void updatePlayerColumn(Player player){
         for (Card card: player.doesHave){
             setTableValue("✅", player, card);
@@ -130,18 +146,23 @@ public class UserInterface {
     }
 
     // This Column indicates whether a card is definitely Guilty or not
-    public void setGuiltyCardColumn(Object value, Card y) {
+    public void setCardColumnGuilty(Card y) {
         int column = 1; // value of Big Card column
         int row = cardToRow.get(y);
-        model.setValueAt(value, row, column);
+        model.setValueAt("ThisCard", row, column);
+    }
+    public void setCardColumnNotGuilty(Card y) {
+        int column = 1; // value of Big Card column
+        int row = cardToRow.get(y);
+        model.setValueAt("❌", row, column);
     }
 
     public void refresh(){
         f.repaint();
     }
 
-    private ArrayList<Card> getCards(){
-        ArrayList<Card> cards = new ArrayList<>();
+    public HashSet<Card> getCards(){
+        HashSet<Card> cards = new HashSet<>();
         for (JComboBox<Card> cb : inputCardsList){
             cards.add((Card)cb.getSelectedItem());
         }
@@ -156,10 +177,10 @@ public class UserInterface {
     private void updateButtonsToDoesPlayerGuess(){
         updateButtonNames("TakeGuess", "SkipGuess");
     }
-    private void updateButtonsToPlayerGuesses(){
+    public void updateButtonsToPlayerGuesses(){
         updateButtonNames("HasCards", "NotHasCards");
     }
-    private void setLockComboBox(Boolean isLocked){
+    public void setLockComboBox(Boolean isLocked){
         for (JComboBox<Card> cb: inputCardsList){
             cb.setEnabled(isLocked);
         }
@@ -167,21 +188,17 @@ public class UserInterface {
 
     // this is a whole mess and should be fractured into about 6 different functions -fix later
     private void handleFirstButton(){
-        setLockComboBox(true);
         // update gameState to player taking a guess
         if (game.gameState == GameState.doesPlayerGuess) {
-            game.gameState = GameState.playerGuesses;
-            game.currentPlayerAsked = game.getNextPlayer(game.currentPlayer);
-            updateButtonsToPlayerGuesses();
+            game.playerTakesGuess();
         }
         // event player shows other player cards
         else if (game.gameState == GameState.playerGuesses) {
-            System.out.println("else asad");
+            game.showOtherPlayerCards();
         }
         refresh();
     }
     private void handleSecondButton(){
-        setLockComboBox(false);
         // skip over player if no selected
         if (game.gameState == GameState.doesPlayerGuess) {
             game.currentPlayer = game.getNextPlayerTurn();

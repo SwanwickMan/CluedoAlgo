@@ -21,7 +21,7 @@ public class Main {
         players[2].addNotHasCard(new Card(CardValue.GREEN));
         players[1].addHasCard(new Card(CardValue.GREEN));
 
-        game.gameUI.setGuiltyCardColumn("WARIO", new Card(CardValue.CANDLESTICK));
+        game.gameUI.setCardColumnGuilty(new Card(CardValue.CANDLESTICK));
         game.gameUI.updatePlayerColumn(players[1]);
         game.gameUI.updatePlayerColumn(players[2]);
         game.gameUI.refresh();
