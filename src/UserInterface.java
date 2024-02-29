@@ -8,12 +8,14 @@ import java.util.Set;
 
 public class UserInterface {
     public JFrame f = new JFrame();
+    public Game game;
     private DefaultTableModel model;
     public ArrayList<JComboBox<Card>> inputCardsList;
     private final HashMap<Player,Integer> playerToColumn;
     private final HashMap<Card,Integer> cardToRow;
 
     public UserInterface(Game game, Player[] players) {
+        this.game = game;
         //initialise Hashmaps
         playerToColumn = new HashMap<>();
         cardToRow = new HashMap<>();

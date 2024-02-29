@@ -2,11 +2,13 @@ import java.util.Arrays;
 
 public class PackagedSetupInfo {
     private final Player[] players;
+    private final Player user;
     private final Card[] startingCards;
     private final int noOfPlayers;
 
     public PackagedSetupInfo(Player[] players, Card[] startingCards, int noOfPlayers){
         this.players = players;
+        this.user = findUser();
         this.startingCards = startingCards;
         this.noOfPlayers = noOfPlayers;
         updateUserCards();
@@ -54,8 +56,18 @@ public class PackagedSetupInfo {
         }
     }
 
+    private Player findUser(){
+        for (Player p : players){
+            if (p.IsUser()){return p;}
+        }
+        return new Player("NoUser");
+    }
+
     public Player[] getPlayers() {
-        return  players;
+        return players;
+    }
+    public Player getUser() {
+        return user;
     }
 
     public Card[] getStartingCards() {

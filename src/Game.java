@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Game {
     public Player[] players;
+    public Player user;
     private int turnIndex;
     private int noOfPlayers;
 
@@ -12,6 +13,7 @@ public class Game {
         this.noOfPlayers = getNumberOfPlayer();
         PackagedSetupInfo setupInfo = new GameSetup(noOfPlayers).collectData();
         this.players = setupInfo.getPlayers();
+        this.user = setupInfo.getUser();
         this.turnIndex = 0;
         this.gameUI = new UserInterface(this, players);
     }
