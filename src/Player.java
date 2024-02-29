@@ -30,7 +30,7 @@ public class Player {
 
     }
 
-    public void passTurn(Card suspect, Card weapon, Card room){
+    public void showNothing(Card suspect, Card weapon, Card room){
         notHave.add(suspect);
         notHave.add(weapon);
         notHave.add(room);
@@ -79,6 +79,6 @@ public class Player {
         return Objects.hash(this.name);
     }
 
-    public boolean IsUser(){return isUser;}
+    public boolean isUser(){return isUser;}
     public void setAsUser(){this.isUser = true;}
 }

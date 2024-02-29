@@ -11,6 +11,8 @@ public class UserInterface {
     public Game game;
     private DefaultTableModel model;
     public ArrayList<JComboBox<Card>> inputCardsList;
+    public JButton firstButton;
+    public JButton secondButton;
     private final HashMap<Player,Integer> playerToColumn;
     private final HashMap<Card,Integer> cardToRow;
 
@@ -23,6 +25,7 @@ public class UserInterface {
         // initialise table
         JPanel tablePanel = createTablePanel(players);
         JPanel inputPanel = createInputPanel();
+        updateButtonsToDoesPlayerGuess();
 
         f.setLayout(new BorderLayout());
         f.add(tablePanel, BorderLayout.WEST);
@@ -65,15 +68,15 @@ public class UserInterface {
         addNewCardSelection(inputPanel,"Weapons:", Card.weapons, 60);
         addNewCardSelection(inputPanel, "Rooms:", Card.rooms, 90);
 
-        JButton startButton = new JButton("Start Game");
-        startButton.addActionListener(e-> System.out.println("Button was clicked"));
-        startButton.setBounds(40, 120, 80, 25);
-        inputPanel.add(startButton);
-        JButton altButton = new JButton("Alt Button");
-        altButton.addActionListener(e-> System.out.println("Alt Button was clicked"));
-        altButton.setBounds(130, 120, 80, 25);
-        inputPanel.add(altButton);
-        inputPanel.setPreferredSize(new Dimension(250,150));
+        firstButton = new JButton("Start Game");
+        firstButton.addActionListener(e-> handleFirstButton());
+        firstButton.setBounds(5, 120, 120, 25);
+        inputPanel.add(firstButton);
+        secondButton = new JButton("Alt Button");
+        secondButton.addActionListener(e-> handleSecondButton());
+        secondButton.setBounds(130, 120, 120, 25);
+        inputPanel.add(secondButton);
+        inputPanel.setPreferredSize(new Dimension(260,150));
 
         return inputPanel;
     }
@@ -127,7 +130,7 @@ public class UserInterface {
     }
 
     // This Column indicates whether a card is definitely Guilty or not
-    public void setBigCardColumn(Object value, Card y) {
+    public void setGuiltyCardColumn(Object value, Card y) {
         int column = 1; // value of Big Card column
         int row = cardToRow.get(y);
         model.setValueAt(value, row, column);
@@ -137,5 +140,50 @@ public class UserInterface {
         f.repaint();
     }
 
+    private ArrayList<Card> getCards(){
+        ArrayList<Card> cards = new ArrayList<>();
+        for (JComboBox<Card> cb : inputCardsList){
+            cards.add((Card)cb.getSelectedItem());
+        }
+        return cards;
+
+    }
+
+    private void updateButtonNames(String txt1, String txt2){
+        firstButton.setText(txt1);
+        secondButton.setText(txt2);
+    }
+    private void updateButtonsToDoesPlayerGuess(){
+        updateButtonNames("TakeGuess", "SkipGuess");
+    }
+    private void updateButtonsToPlayerGuesses(){
+        updateButtonNames("HasCards", "NotHasCards");
+    }
+
+    private void handleFirstButton(){
+        // update
+        if (game.gameState == GameState.doesPlayerGuess) {
+            game.gameState = GameState.playerGuesses;
+            updateButtonsToPlayerGuesses();
+            System.out.println("asad");
+        }
+        else {
+            System.out.println("else asad");
+        }
+        refresh();
+    }
+    private void handleSecondButton(){
+        // skip over if player selects no
+        if (game.gameState == GameState.doesPlayerGuess) {
+            game.currentPlayer = game.getNextPlayer();
+            updateButtonsToDoesPlayerGuess();
+            System.out.println("fhdgh");
+        }
+        else{
+            System.out.println("else fhdgh");
+        }
+
+        refresh();
+    }
 
 }

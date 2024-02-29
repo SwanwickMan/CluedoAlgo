@@ -30,7 +30,7 @@ public class PackagedSetupInfo {
         for (Object c1: arr){
             for (Object c2: arr){
                 if (c1.equals(c2) && !(c1==c2)){
-                    System.out.println("Error: duplicates: " + c1.toString() + " " + c2.toString());
+                    System.out.println("Error: duplicates: " + c1 + " " + c2);
                     return false; }
             }
         }
@@ -39,7 +39,7 @@ public class PackagedSetupInfo {
     private boolean singleUserExists(){
         int noOfUsers = 0;
         for (Player p: players){
-            if (p.IsUser()){noOfUsers++;}
+            if (p.isUser()){noOfUsers++;}
         }
         if (noOfUsers == 1){
             return true;
@@ -50,7 +50,7 @@ public class PackagedSetupInfo {
 
     private void updateUserCards(){
         for (Player p: players){
-            if(p.IsUser()){
+            if(p.isUser()){
                 p.doesHave.addAll(Arrays.asList(startingCards));
             }
         }
@@ -58,7 +58,7 @@ public class PackagedSetupInfo {
 
     private Player findUser(){
         for (Player p : players){
-            if (p.IsUser()){return p;}
+            if (p.isUser()){return p;}
         }
         return new Player("NoUser");
     }
@@ -68,9 +68,5 @@ public class PackagedSetupInfo {
     }
     public Player getUser() {
         return user;
-    }
-
-    public Card[] getStartingCards() {
-        return startingCards;
     }
 }

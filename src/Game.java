@@ -3,9 +3,9 @@ import java.util.Scanner;
 public class Game {
     public Player[] players;
     public Player user;
-    private int turnIndex;
+    public Player currentPlayer;
     private int noOfPlayers;
-
+    public GameState gameState;
     public UserInterface gameUI;
 
 
@@ -14,13 +14,15 @@ public class Game {
         PackagedSetupInfo setupInfo = new GameSetup(noOfPlayers).collectData();
         this.players = setupInfo.getPlayers();
         this.user = setupInfo.getUser();
-        this.turnIndex = 0;
+        this.currentPlayer = players[0];
+        this.gameState = GameState.doesPlayerGuess;
         this.gameUI = new UserInterface(this, players);
     }
 
     public Game(PackagedSetupInfo setupInfo){
         this.players = setupInfo.getPlayers();
-        this.turnIndex = 0;
+        this.currentPlayer = players[0];
+        this.gameState = GameState.doesPlayerGuess;
         this.gameUI = new UserInterface(this, players);
     }
 
@@ -34,20 +36,37 @@ public class Game {
 
 
     public Player getNextPlayer(){
-        boolean activePlayerExists = false;
-        for(Player p : players){if(p.active){activePlayerExists = true;}}
+        boolean activePlayers = false;
+        for(Player p : players){if (p.active) { activePlayers = true; break; }}
+        if (!activePlayers) { throw new RuntimeException("No active players left"); }
 
-        while (activePlayerExists){
-            turnIndex ++;
-            if (turnIndex >= players.length){
-                turnIndex = 0;
-            }
-            if (players[turnIndex].active){
-                return players[turnIndex];
-            }
+
+        boolean afterCurrentPlayer = false;
+        for (Player p: players){
+            if (afterCurrentPlayer && p.active) {return p;}
+            if (p.equals(currentPlayer)){afterCurrentPlayer = true;}
+        }
+        for (Player p: players){
+            if (p.active) {return p;}
+            if (p.equals(currentPlayer)){break;}
         }
 
-        throw new RuntimeException("No players Left");
+        throw new RuntimeException("Single player Left");
 
     }
+
+    public void takeTurn(Player player){
+        if (player.isUser()) { userTakeTurn(); }
+        else { nonUserTakeTurn(); }
+    }
+
+    public void userTakeTurn(){
+
+    }
+
+    public void nonUserTakeTurn(){
+
+    }
+
+
 }

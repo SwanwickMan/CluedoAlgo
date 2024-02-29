@@ -10,17 +10,18 @@ public class Main {
         Game game = new Game(setupInfo);
 
 
-        // game.players[1].active = false;game.players[0].active = false;
-        // for (int i = 1; i < 5; i++){
-        //     System.out.println(game.players[game.getNextTurn()]);
-        // }
+//         game.players[2].active = false; game.players[0].active = false;
+//         for (int i = 1; i < 10; i++){
+//             System.out.println(game.currentPlayer);
+//             game.currentPlayer = game.getNextPlayer();
+//         }
 
 
 
         players[2].addNotHasCard(new Card(CardValue.GREEN));
         players[1].addHasCard(new Card(CardValue.GREEN));
 
-        game.gameUI.setBigCardColumn("WARIO", new Card(CardValue.CANDLESTICK));
+        game.gameUI.setGuiltyCardColumn("WARIO", new Card(CardValue.CANDLESTICK));
         game.gameUI.updatePlayerColumn(players[1]);
         game.gameUI.updatePlayerColumn(players[2]);
         game.gameUI.refresh();
