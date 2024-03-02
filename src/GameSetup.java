@@ -21,7 +21,7 @@ public class GameSetup {
 
         f.add(panel);
         f.pack();
-        f.setSize(300,200);
+        f.setSize(300,300);
         f.setVisible(true);
 
     }

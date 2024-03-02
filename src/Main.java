@@ -25,5 +25,7 @@ public class Main {
         game.gameUI.updatePlayerColumn(players[1]);
         game.gameUI.updatePlayerColumn(players[2]);
         game.gameUI.refresh();
+
+        while (true) game.gameUI.refresh();
     }
 }

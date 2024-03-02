@@ -14,7 +14,6 @@ public class UserInterface {
     public ArrayList<JComboBox<Card>> inputCardsList;
     public JButton firstButton;
     public JButton secondButton;
-    public JComboBox<Card> userShownCard;
     private final HashMap<Player,Integer> playerToColumn;
     private final HashMap<Card,Integer> cardToRow;
 
@@ -35,9 +34,6 @@ public class UserInterface {
 
         f.pack();
         f.setVisible(true);
-
-        System.out.println(getCardShownToUser());
-
     }
 
     private JPanel createTablePanel(Player[] players) {
@@ -157,6 +153,7 @@ public class UserInterface {
         model.setValueAt("❌", row, column);
     }
 
+
     public void refresh(){
         f.repaint();
     }
@@ -186,7 +183,8 @@ public class UserInterface {
         }
     }
 
-    // this is a whole mess and should be fractured into about 6 different functions -fix later
+
+
     private void handleFirstButton(){
         // update gameState to player taking a guess
         if (game.gameState == GameState.doesPlayerGuess) {

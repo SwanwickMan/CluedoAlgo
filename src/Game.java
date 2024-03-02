@@ -71,38 +71,56 @@ public class Game {
         else { nonUserTakeTurn(); }
     }
 
+    // sets game state and updates UI
+    private void setGameState(GameState gameState){
+        this.gameState = gameState;
+        if (gameState == GameState.doesPlayerGuess) { gameUI.updateButtonsToDoesPlayerGuess();}
+        else if (gameState == GameState.playerGuesses) { gameUI.updateButtonsToPlayerGuesses();}
+
+    }
+
     public void playerTakesGuess(){
-        gameState = GameState.playerGuesses;
         currentPlayerAsked = getNextPlayer(currentPlayer);
-        gameUI.updateButtonsToPlayerGuesses();
+        setGameState(GameState.playerGuesses);
     }
 
     public void showOtherPlayerCards(){
-        if (currentPlayerAsked.isUser()){ return; } // do nothing if user is showing their cards
-        else if (currentPlayer.isUser()){
-            // when user is shown card set card to not guilty and add to other player hasList
+        // decide how to deal with card being shown
+        if (currentPlayerAsked.isUser()){ // do nothing if user is showing their cards
+            return;
+        }
+        else if (currentPlayer.isUser()){ // when user is shown card set card to not guilty and add to other player hasList
             Card shownCard = gameUI.getCardShownToUser();
             gameUI.setCardColumnNotGuilty(shownCard);
             currentPlayerAsked.addHasCard(shownCard);
         }
-        else {
-            // when non-users shows cards add cards to player showings guessList
+        else { // when non-users shows cards add cards to player showings guessList
             HashSet<Card> shownCards = gameUI.getCards();
             currentPlayerAsked.guessList.add(shownCards);
         }
+        setGameState(GameState.doesPlayerGuess);
     }
 
     public void playerDoesNotTakeTurn(){
         currentPlayer = getNextPlayerTurn();
-        gameUI.updateButtonsToDoesPlayerGuess();
+        setGameState(GameState.doesPlayerGuess);
     }
 
     public void playerDoesNotShowCards(){
         HashSet<Card> cards = gameUI.getCards();
-        currentPlayerAsked = getNextPlayer(currentPlayerAsked);
         gameUI.updateButtonsToDoesPlayerGuess();
 
+        // add cards to not has list
         currentPlayerAsked.addNotHasCard(cards);
+
+        // skip to ask next player;
+        currentPlayerAsked = getNextPlayer(currentPlayerAsked);
+
+        // return after loop reaches start
+        if (currentPlayerAsked == currentPlayer){
+            setGameState(GameState.doesPlayerGuess);
+            // fix later add more deductive logic
+        }
     }
 
     public void userTakeTurn(){
