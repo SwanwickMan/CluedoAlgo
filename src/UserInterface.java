@@ -174,7 +174,7 @@ public class UserInterface {
         firstButton.setText(txt1);
         secondButton.setText(txt2);
     }
-    private void updateButtonsToDoesPlayerGuess(){
+    public void updateButtonsToDoesPlayerGuess(){
         updateButtonNames("TakeGuess", "SkipGuess");
     }
     public void updateButtonsToPlayerGuesses(){
@@ -199,16 +199,14 @@ public class UserInterface {
         refresh();
     }
     private void handleSecondButton(){
-        // skip over player if no selected
+        // skip over player if they don't guess
         if (game.gameState == GameState.doesPlayerGuess) {
-            game.currentPlayer = game.getNextPlayerTurn();
-            updateButtonsToDoesPlayerGuess();
+            game.playerDoesNotTakeTurn();
         }
         // event player doesn't show other player cards
         else if (game.gameState == GameState.playerGuesses) {
-            game.currentPlayerAsked = game.getNextPlayer(game.currentPlayer);
+            game.playerDoesNotShowCards();
         }
-
         refresh();
     }
 

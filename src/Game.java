@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -91,6 +90,19 @@ public class Game {
             HashSet<Card> shownCards = gameUI.getCards();
             currentPlayerAsked.guessList.add(shownCards);
         }
+    }
+
+    public void playerDoesNotTakeTurn(){
+        currentPlayer = getNextPlayerTurn();
+        gameUI.updateButtonsToDoesPlayerGuess();
+    }
+
+    public void playerDoesNotShowCards(){
+        HashSet<Card> cards = gameUI.getCards();
+        currentPlayerAsked = getNextPlayer(currentPlayerAsked);
+        gameUI.updateButtonsToDoesPlayerGuess();
+
+        currentPlayerAsked.addNotHasCard(cards);
     }
 
     public void userTakeTurn(){

@@ -53,9 +53,15 @@ public class Player {
         if (notHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in notHave Set");}
         this.doesHave.add(card);
     }
+    public void addHasCard(HashSet<Card> cards){
+        for (Card c: cards){addHasCard(c);}
+    }
     public void addNotHasCard(Card card){
         if (doesHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in doesHave Set");}
         this.notHave.add(card);
+    }
+    public void addNotHasCard(HashSet<Card> cards){
+        for (Card c: cards){addNotHasCard(c);}
     }
 
     @Override
