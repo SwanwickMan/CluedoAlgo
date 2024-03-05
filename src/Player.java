@@ -50,14 +50,14 @@ public class Player {
     }
 
     public void addHasCard(Card card){
-        if (notHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in notHave Set");}
+        if (notHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card" + card + "already in notHave Set of " + this);}
         this.doesHave.add(card);
     }
     public void addHasCard(HashSet<Card> cards){
         for (Card c: cards){addHasCard(c);}
     }
     public void addNotHasCard(Card card){
-        if (doesHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card already in doesHave Set");}
+        if (doesHave.contains(card)) {throw new RuntimeException("Contradiction Error: Card" + card + "already in notHave Set of " + this);}
         this.notHave.add(card);
     }
     public void addNotHasCard(HashSet<Card> cards){

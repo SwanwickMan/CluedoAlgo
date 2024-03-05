@@ -135,6 +135,13 @@ public class UserInterface {
         }
     }
 
+    public void debugUpdateAllPlayerColumns(){
+        for (Player p: game.players){
+            updatePlayerColumn(p);
+        }
+        refresh();
+    }
+
     public void setTableValue(Object value, Player x, Card y){
         int column = playerToColumn.get(x);
         int row = cardToRow.get(y);
@@ -152,6 +159,8 @@ public class UserInterface {
         int row = cardToRow.get(y);
         model.setValueAt("❌", row, column);
     }
+
+
 
 
     public void refresh(){

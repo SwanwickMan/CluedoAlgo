@@ -16,7 +16,7 @@ public class Game {
         PackagedSetupInfo setupInfo = new GameSetup(noOfPlayers).collectData();
         this.players = setupInfo.getPlayers();
         this.user = setupInfo.getUser();
-        this.currentPlayer = players[0];
+        this.currentPlayer = players[players.length-1]; // set to last cause of reasons
         this.gameState = GameState.doesPlayerGuess;
         this.gameUI = new UserInterface(this, players);
     }
@@ -107,10 +107,8 @@ public class Game {
     }
 
     public void playerDoesNotShowCards(){
-        HashSet<Card> cards = gameUI.getCards();
-        gameUI.updateButtonsToDoesPlayerGuess();
-
         // add cards to not has list
+        HashSet<Card> cards = gameUI.getCards();
         currentPlayerAsked.addNotHasCard(cards);
 
         // skip to ask next player;
