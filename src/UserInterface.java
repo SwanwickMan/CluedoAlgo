@@ -34,6 +34,7 @@ public class UserInterface {
 
         f.pack();
         f.setVisible(true);
+        debugUpdateAllPlayerColumns();
     }
 
     private JPanel createTablePanel(Player[] players) {
@@ -203,6 +204,7 @@ public class UserInterface {
         else if (game.gameState == GameState.playerGuesses) {
             game.showOtherPlayerCards();
         }
+        debugUpdateAllPlayerColumns();
         refresh();
     }
     private void handleSecondButton(){
@@ -214,6 +216,7 @@ public class UserInterface {
         else if (game.gameState == GameState.playerGuesses) {
             game.playerDoesNotShowCards();
         }
+        debugUpdateAllPlayerColumns();
         refresh();
     }
 

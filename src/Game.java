@@ -58,10 +58,10 @@ public class Game {
         boolean afterCurrentPlayer = false;
         for (Player p: players){
             if (afterCurrentPlayer) {return p;}
-            if (p.equals(currentPlayer)){afterCurrentPlayer = true;}
+            if (p.equals(player)){afterCurrentPlayer = true;}
         }
         for (Player p: players){
-            if (!p.equals(currentPlayer)){return p;}
+            if (!p.equals(player)){return p;}
         }
         throw new RuntimeException("player not found");
     }
@@ -115,7 +115,8 @@ public class Game {
         currentPlayerAsked = getNextPlayer(currentPlayerAsked);
 
         // return after loop reaches start
-        if (currentPlayerAsked == currentPlayer){
+        if (currentPlayerAsked.equals(currentPlayer)){
+            currentPlayer = getNextPlayerTurn();
             setGameState(GameState.doesPlayerGuess);
             // fix later add more deductive logic
         }

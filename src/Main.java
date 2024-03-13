@@ -10,10 +10,11 @@ public class Main {
         Game game = new Game(setupInfo);
 
 
-//         game.players[2].active = false; game.players[0].active = false;
+//        game.players[2].active = false; game.players[0].active = false;
+//        Player player = game.players[0];
 //         for (int i = 1; i < 10; i++){
-//             System.out.println(game.currentPlayer);
-//             game.currentPlayer = game.getNextPlayer();
+//             System.out.println(player);
+//             player = game.getNextPlayer(player);
 //         }
 
 
@@ -26,6 +27,5 @@ public class Main {
 //        game.gameUI.updatePlayerColumn(players[2]);
 //        game.gameUI.refresh();
 
-        while (true) game.gameUI.debugUpdateAllPlayerColumns();
     }
 }
