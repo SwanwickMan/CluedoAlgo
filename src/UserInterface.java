@@ -32,10 +32,29 @@ public class UserInterface {
         f.add(tablePanel, BorderLayout.WEST);
         f.add(inputPanel, BorderLayout.EAST);
 
+        JButton backupButton = new JButton("Load backup");
+        backupButton.addActionListener(e-> this.loadBackup());
+        f.add(backupButton);
+
         f.pack();
         f.setVisible(true);
 
         debugUpdateAllPlayerColumns();
+    }
+
+    private void loadBackup(){
+        game.loadBackup();
+        clearTable();
+
+        System.out.println("backup loaded");
+    }
+
+    private void clearTable(){
+        for (int row = 1; row < model.getRowCount(); row++) {
+            for (int col = 1; col < model.getColumnCount(); col++) {
+                model.setValueAt("", row, col); // Set each cell to blank
+            }
+        }
     }
 
     private JPanel createTablePanel(Player[] players) {

@@ -22,6 +22,15 @@ public class Player {
         this.maxCardsPerPlayer = maxCardsPerPlayer;
     }
 
+    public Player(Player player){
+        this.name = player.name;
+        this.active = player.active;
+        this.notHave = new HashSet<>(player.notHave);
+        this.doesHave = new HashSet<>(player.doesHave);
+        this.guessList = new ArrayList<>(player.guessList);
+        this.maxCardsPerPlayer = player.maxCardsPerPlayer;
+    }
+
     // checks if players is marked as user
     private String setName(String name){
         if (name.startsWith("*")){

@@ -1,10 +1,9 @@
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Game {
-    public final int maxCardsPerPlayer;
+    public int maxCardsPerPlayer;
     public Player[] players;
     public Player user;
     public Player currentPlayer;
@@ -12,6 +11,7 @@ public class Game {
     public GameState gameState;
     public UserInterface gameUI;
     public Set<Card> innocent = new HashSet<>();
+    private BackupQueue backupSystem = new BackupQueue();
 
 
     public Game(){
@@ -34,6 +34,17 @@ public class Game {
         this.gameUI = new UserInterface(this, players);
         this.innocent.addAll(user.doesHave);
         this.maxCardsPerPlayer = (int)Math.ceil(18.0/players.length);
+    }
+
+    public Game(Player[] players, Player user, Player currentPlayer,Player currentPlayerAsked, GameState gamestate, Set<Card> innocent, int maxCardsPerPlayer){
+        this.players = players;
+        this.user = user;
+        this.currentPlayer = currentPlayer;
+        this.currentPlayerAsked = currentPlayerAsked;
+        this.gameState = gamestate;
+        this.gameUI = null;
+        this.innocent = innocent;
+        this.maxCardsPerPlayer = maxCardsPerPlayer;
     }
 
     private int getNumberOfPlayer(){
@@ -86,7 +97,7 @@ public class Game {
     }
 
     public void playerDoesNotTakeTurn(){
-        currentPlayer = getNextPlayerTurn();
+        currentPlayer = nextTurn();
         setGameState(GameState.doesPlayerGuess);
     }
 
@@ -103,7 +114,7 @@ public class Game {
                 currentPlayerAsked.guessList.add(shownCards);
             }
         }
-        currentPlayer = getNextPlayerTurn();
+        currentPlayer = nextTurn();
         setGameState(GameState.doesPlayerGuess);
     }
 
@@ -122,7 +133,7 @@ public class Game {
         // return after loop reaches start
         if (currentPlayerAsked == currentPlayer){
             setGameState(GameState.doesPlayerGuess);
-            currentPlayer = getNextPlayerTurn();
+            currentPlayer = nextTurn();
         }
     }
 
@@ -130,6 +141,24 @@ public class Game {
         for (Player p : players){
             if (p == other) { p.showUser(c); }
             else { p.addNotHasCard(c); }
+        }
+    }
+
+    private Player nextTurn(){
+        this.backupSystem.add(this);
+        return this.getNextPlayerTurn();
+    }
+
+    public void loadBackup(){
+        Game backup = this.backupSystem.pop();
+        if (backup != null) {
+            this.players = backup.players;
+            this.user = backup.user;
+            this.currentPlayer = backup.currentPlayer;
+            this.currentPlayerAsked = backup.currentPlayerAsked;
+            this.gameState = backup.gameState;
+            this.innocent = backup.innocent;
+            this.maxCardsPerPlayer = backup.maxCardsPerPlayer;
         }
     }
 }
