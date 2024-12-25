@@ -1,31 +1,39 @@
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Game {
+    public final int maxCardsPerPlayer;
     public Player[] players;
     public Player user;
     public Player currentPlayer;
     public Player currentPlayerAsked;
-    private int noOfPlayers;
     public GameState gameState;
     public UserInterface gameUI;
+    public Set<Card> innocent = new HashSet<>();
 
 
     public Game(){
-        this.noOfPlayers = getNumberOfPlayer();
+        int noOfPlayers = getNumberOfPlayer();
         PackagedSetupInfo setupInfo = new GameSetup(noOfPlayers).collectData();
         this.players = setupInfo.getPlayers();
         this.user = setupInfo.getUser();
         this.currentPlayer = players[players.length-1]; // set to last cause of reasons
         this.gameState = GameState.doesPlayerGuess;
         this.gameUI = new UserInterface(this, players);
+        this.innocent.addAll(user.doesHave);
+        this.maxCardsPerPlayer = (int)Math.ceil(18.0/noOfPlayers);
     }
 
     public Game(PackagedSetupInfo setupInfo){
         this.players = setupInfo.getPlayers();
+        this.user = setupInfo.getUser();
         this.currentPlayer = players[0];
         this.gameState = GameState.doesPlayerGuess;
         this.gameUI = new UserInterface(this, players);
+        this.innocent.addAll(user.doesHave);
+        this.maxCardsPerPlayer = (int)Math.ceil(18.0/players.length);
     }
 
     private int getNumberOfPlayer(){
@@ -55,27 +63,20 @@ public class Game {
         throw new RuntimeException("Single player Left");
     }
     public Player getNextPlayer(Player player){
-        boolean afterCurrentPlayer = false;
-        for (Player p: players){
-            if (afterCurrentPlayer) {return p;}
-            if (p.equals(player)){afterCurrentPlayer = true;}
-        }
-        for (Player p: players){
-            if (!p.equals(player)){return p;}
+        for (int i=0; i<players.length; i++){
+            if (players[i] == player) { return players[(i+1) % players.length]; }
         }
         throw new RuntimeException("player not found");
-    }
-
-    public void takeTurn(Player player){
-        if (player.isUser()) { userTakeTurn(); }
-        else { nonUserTakeTurn(); }
     }
 
     // sets game state and updates UI
     private void setGameState(GameState gameState){
         this.gameState = gameState;
         if (gameState == GameState.doesPlayerGuess) { gameUI.updateButtonsToDoesPlayerGuess();}
-        else if (gameState == GameState.playerGuesses) { gameUI.updateButtonsToPlayerGuesses();}
+        else if (gameState == GameState.playerGuesses) {
+            gameUI.updateButtonsToPlayerGuesses();
+            gameUI.debugUpdateAllPlayerColumns();
+        }
 
     }
 
@@ -84,27 +85,29 @@ public class Game {
         setGameState(GameState.playerGuesses);
     }
 
-    public void showOtherPlayerCards(){
-        // decide how to deal with card being shown
-        if (currentPlayerAsked.isUser()){ // do nothing if user is showing their cards
-            return;
-        }
-        else if (currentPlayer.isUser()){ // when user is shown card set card to not guilty and add to other player hasList
-            Card shownCard = gameUI.getCardShownToUser();
-            gameUI.setCardColumnNotGuilty(shownCard);
-            currentPlayerAsked.addHasCard(shownCard);
-        }
-        else { // when non-users shows cards add cards to player showings guessList
-            HashSet<Card> shownCards = gameUI.getCards();
-            currentPlayerAsked.guessList.add(shownCards);
-        }
-        setGameState(GameState.doesPlayerGuess);
-    }
-
     public void playerDoesNotTakeTurn(){
         currentPlayer = getNextPlayerTurn();
         setGameState(GameState.doesPlayerGuess);
     }
+
+    public void showOtherPlayerCards(){
+        // decide how to deal with card being shown
+        if (!currentPlayerAsked.isUser()){ // do nothing if user is showing their cards
+            if (currentPlayer.isUser()){ // when user is shown card set card to not guilty and add to other player hasList
+                Card shownCard = gameUI.getCardShownToUser();
+                gameUI.setCardColumnNotGuilty(shownCard);
+                userShownCard(currentPlayerAsked, shownCard);
+            }
+            else { // when non-users shows cards add cards to player showings guessList
+                HashSet<Card> shownCards = gameUI.getCards();
+                currentPlayerAsked.guessList.add(shownCards);
+            }
+        }
+        currentPlayer = getNextPlayerTurn();
+        setGameState(GameState.doesPlayerGuess);
+    }
+
+
 
     public void playerDoesNotShowCards(){
         // add cards to not has list
@@ -113,22 +116,20 @@ public class Game {
 
         // skip to ask next player;
         currentPlayerAsked = getNextPlayer(currentPlayerAsked);
+        System.out.println(currentPlayerAsked.name +"|"+currentPlayer.name);
+        System.out.println(getNextPlayer(currentPlayerAsked).name);
 
         // return after loop reaches start
-        if (currentPlayerAsked.equals(currentPlayer)){
-            currentPlayer = getNextPlayerTurn();
+        if (currentPlayerAsked == currentPlayer){
             setGameState(GameState.doesPlayerGuess);
-            // fix later add more deductive logic
+            currentPlayer = getNextPlayerTurn();
         }
     }
 
-    public void userTakeTurn(){
-
+    private void userShownCard(Player other, Card c){
+        for (Player p : players){
+            if (p == other) { p.showUser(c); }
+            else { p.addNotHasCard(c); }
+        }
     }
-
-    public void nonUserTakeTurn(){
-
-    }
-
-
 }

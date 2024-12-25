@@ -14,6 +14,7 @@ public class Card {
     public static final Set<Card> suspects = createCardTypeSet(suspectTypes);
     public static final Set<Card> weapons = createCardTypeSet(weaponTypes);
     public static final Set<Card> rooms = createCardTypeSet(roomTypes);
+    public static final Set<Card> allCards = getAllCards();
 
 
 
@@ -78,5 +79,12 @@ public class Card {
     @Override
     public int hashCode(){
         return Objects.hash(this.value);
+    }
+
+    private static Set<Card> getAllCards(){
+        Set<Card> set = new HashSet<>(suspects);
+        set.addAll(weapons);
+        set.addAll(rooms);
+        return set;
     }
 }

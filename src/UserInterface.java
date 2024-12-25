@@ -34,6 +34,7 @@ public class UserInterface {
 
         f.pack();
         f.setVisible(true);
+
         debugUpdateAllPlayerColumns();
     }
 
@@ -98,8 +99,8 @@ public class UserInterface {
     }
 
     private void createColumns(DefaultTableModel model,Player[] players){
-        model.addColumn(new Player("Mansion"));
-        model.addColumn(new Player("|???|"));
+        model.addColumn(new Player("Mansion",-1));
+        model.addColumn(new Player("|???|",-1));
         int i = 2;
         for (Player p : players) {
             model.addColumn(p);
@@ -137,8 +138,14 @@ public class UserInterface {
     }
 
     public void debugUpdateAllPlayerColumns(){
+        f.setTitle("current player:" + game.currentPlayer.name +
+                    " | asked: " + (game.currentPlayerAsked != null ? game.currentPlayerAsked.name : "none"));
         for (Player p: game.players){
             updatePlayerColumn(p);
+        }
+        for (Card c: game.innocent){
+            System.out.println(c.toString());
+            setCardColumnNotGuilty(c);
         }
         refresh();
     }
@@ -198,6 +205,7 @@ public class UserInterface {
     private void handleFirstButton(){
         // update gameState to player taking a guess
         if (game.gameState == GameState.doesPlayerGuess) {
+
             game.playerTakesGuess();
         }
         // event player shows other player cards
@@ -205,7 +213,6 @@ public class UserInterface {
             game.showOtherPlayerCards();
         }
         debugUpdateAllPlayerColumns();
-        refresh();
     }
     private void handleSecondButton(){
         // skip over player if they don't guess
@@ -217,7 +224,6 @@ public class UserInterface {
             game.playerDoesNotShowCards();
         }
         debugUpdateAllPlayerColumns();
-        refresh();
     }
 
 }

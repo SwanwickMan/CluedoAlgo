@@ -11,13 +11,15 @@ public class Player {
     public Set<Card> notHave;
     public Set<Card> doesHave;
     public ArrayList<HashSet<Card>> guessList;
+    private final int maxCardsPerPlayer;
 
-    public Player(String name){
+    public Player(String name, int maxCardsPerPlayer){
         this.name = setName(name);
         this.active = true;
         this.notHave = new HashSet<>();
         this.doesHave = new HashSet<>();
         this.guessList = new ArrayList<>();
+        this.maxCardsPerPlayer = maxCardsPerPlayer;
     }
 
     // checks if players is marked as user
@@ -34,19 +36,40 @@ public class Player {
         notHave.add(suspect);
         notHave.add(weapon);
         notHave.add(room);
+
+        EvaluateSelf();
     }
 
     public void showOther(Card suspect, Card weapon, Card room){
         // add guess to list
         guessList.add(new HashSet<>(Arrays.asList(suspect, weapon, room)));
+
+        EvaluateSelf();
     }
 
-    public void showMe(Card cardShown){
+    public void showUser(Card cardShown){
         doesHave.add(cardShown);
+        EvaluateSelf();
     }
 
     public void EvaluateSelf(){
+        if (doesHave.size() == maxCardsPerPlayer) { // update notHave when all players cards are discovered
+            Set<Card> remainingCards = new HashSet<>(Card.allCards);
+            remainingCards.removeAll(doesHave);
+            notHave.addAll(remainingCards);
+        }
+        evaluateGuessList();
+    }
 
+    private void evaluateGuessList(){
+        for (Set<Card> guess : guessList){
+            Set<Card> difference = new HashSet<>(guess);
+            difference.removeAll(notHave);
+            if (difference.size() == 1){ // if only 1 card in guess not in notHave then add card to doesHave
+                Card inferredCard = difference.iterator().next();
+                doesHave.add(inferredCard);
+            }
+        }
     }
 
     public void addHasCard(Card card){

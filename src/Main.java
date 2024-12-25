@@ -3,7 +3,7 @@ public class Main {
         Card card = new Card(CardValue.REVOLVER);
 
         // test setup of game
-        Player[] players = {new Player("1"), new Player("2"),new Player("*3")};
+        Player[] players = {new Player("1",6), new Player("2",6),new Player("*3",6)};
         Card[] startingCards = {new Card(CardValue.REVOLVER), new Card(CardValue.SCARLET), new Card(CardValue.DININGROOM)};
         PackagedSetupInfo setupInfo = new PackagedSetupInfo(players,startingCards, players.length);
         System.out.println(setupInfo.validate());

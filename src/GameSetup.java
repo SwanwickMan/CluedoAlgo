@@ -44,10 +44,11 @@ public class GameSetup {
     }
 
     private Player[] stringToPlayers(String playerString){
+        int maxCardsPerPlayer = (int)Math.ceil(18.0/noOfPlayers);
         playerString = playerString.replaceAll("\\s+","");
         // convert String[] array to Player[] array
         Player[] players = Arrays.stream(playerString.split(","))
-                .map(Player::new)
+                .map(name -> new Player(name, maxCardsPerPlayer))
                 .toArray(Player[]::new);
 
         return players;

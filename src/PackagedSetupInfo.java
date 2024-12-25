@@ -60,7 +60,7 @@ public class PackagedSetupInfo {
         for (Player p : players){
             if (p.isUser()){return p;}
         }
-        return new Player("NoUser");
+        return null;
     }
 
     public Player[] getPlayers() {
